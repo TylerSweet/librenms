@@ -339,9 +339,9 @@ function list_devices()
         $param[] = $query;
     } elseif ($type == 'ipv4') {
         $join .= " LEFT JOIN `ports` AS p ON d.`device_id` = p.`device_id` LEFT JOIN `ipv4_addresses` AS a ON p.`port_id` = a.`port_id` ";
-        $sql = "a.`ipv4_address`=?";
+        $sql = "(a.`ipv4_address`=? or d.`ip`=?)";
         $select .= ",p.* ";
-        $param[] = $query;
+        $param = array($query, inet_pton($query));
     } elseif ($type == 'ipv6') {
         $join .= " LEFT JOIN `ports` AS p ON d.`device_id` = p.`device_id` LEFT JOIN `ipv6_addresses` AS a ON p.`port_id` = a.`port_id` ";
         $sql = "a.`ipv6_address`=? OR a.`ipv6_compressed`=?";
